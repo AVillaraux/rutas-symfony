@@ -2,6 +2,7 @@
 
 namespace App\Integra;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -25,6 +26,15 @@ class Framework
     public function handle(Request $request)
     {
         $this->matcher->getContext()->fromRequest($request);
+
+        $pathInfo = $request->getPathInfo();
+        if (!str_ends_with($pathInfo, '/')) {
+            $baseUrl = $request->getBaseUrl();
+            $newPathInfo = $baseUrl.$pathInfo . '/';
+            if($request->isMethod('GET')){
+                return new RedirectResponse($newPathInfo, 301);
+            }
+        }
 
         try {
             $request->attributes->add($this->matcher->match($request->getPathInfo()));

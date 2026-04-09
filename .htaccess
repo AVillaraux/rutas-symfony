@@ -1,4 +1,11 @@
 RewriteEngine On
+
+# Define el entorno de la aplicación
+SetEnv APP_ENV development
+
+# Define el entorno de la aplicación
+# SetEnv APP_ENV production
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L]
